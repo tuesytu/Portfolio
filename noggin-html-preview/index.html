@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TU Siyu Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-beige: #f2e7df;
+            --accent-orange: #d06444;
+            --accent-yellow: #ffc12d;
+            --text-black: #222222;
+            --grid-line: rgba(34, 34, 34, 0.08);
+            --title-size: 5.5rem;
+            --nav-height: 72px;
+            --uniform-padding: 8rem 4rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+
+        body {
+            background-color: var(--bg-beige);
+            font-family: 'PingFang SC', 'Space Mono', monospace;
+            color: var(--text-black);
+            transition: background-color 0.8s ease;
+            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .hand-font { font-family: 'Arial Black', sans-serif; font-weight: 900; letter-spacing: -2px; line-height: 1.1; text-transform: uppercase; filter: url(#rough-edge); }
+        .mono-bold { font-family: 'Space Mono', monospace; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .mono-regular { font-family: 'Space Mono', 'PingFang SC', monospace; font-weight: 400; font-size: 0.95rem; line-height: 1.8; }
+        .cn { font-family: 'PingFang SC', sans-serif !important; text-transform: none !important; letter-spacing: 0 !important; }
+        .en { font-family: 'Space Mono', monospace; }
+        .title-en { font-family: 'Arial Black', sans-serif; }
+
+        nav {
+            height: var(--nav-height);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 4rem; border-bottom: 1.5px solid var(--text-black);
+            background-color: inherit; position: sticky; top: 0; z-index: 2000;
+        }
+        .nav-links {
+            display: flex;
+            gap: 4rem;
+        }
+        .nav-link {
+            background: none;
+            border: 0;
+            padding: 0;
+            color: inherit;
+            font: inherit;
+            letter-spacing: inherit;
+            text-transform: inherit;
+            cursor: pointer;
+        }
+
+        .lang-toggle {
+            padding: 0.5rem 1.4rem; background: transparent; border: 1.8px solid var(--text-black);
+            border-radius: 50% 45% 52% 48% / 48% 52% 45% 50%;
+            font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.75rem;
+            transition: 0.3s; filter: url(#rough-edge); outline: none;
+        }
+        .lang-toggle:hover { transform: rotate(-5deg); color: var(--accent-orange); border-color: var(--accent-orange); }
+
+        .content-wrap { max-width: 1200px; margin: 0 auto; }
+        header.hero, section { padding: var(--uniform-padding); border-bottom: 1.5px solid var(--text-black); }
+        #about, #projects-board, #education, #projects, #internships, #other-work { scroll-margin-top: var(--nav-height); }
+        #about, #projects-board, #other-work { padding-top: 5.8rem; }
+        #education, #projects, #internships { padding-top: 4.2rem; padding-bottom: 3.5rem; }
+
+        .theme-beige { background-color: #f2e7df; }
+        .theme-green { background-color: #96a388; }
+        .theme-orange { background-color: #e8a08a; }
+        .theme-yellow { background-color: #f9d371; }
+
+        .section-nav-header {
+            color: var(--accent-orange);
+            font-family: 'Space Mono', 'PingFang SC', monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-top: none;
+            padding-top: 0;
+            margin-top: 2rem;
+        }
+
+        .skills-container { display: flex; flex-direction: column; gap: 70px; align-items: center; margin-top: 5rem; }
+        .skill-row { display: flex; gap: 100px; justify-content: center; flex-wrap: wrap; }
+        .skill-orb-wrapper { position: relative; width: 135px; height: 135px; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .skill-orb {
+            position: absolute; width: 100%; height: 100%;
+            background: #fff; border: 2.5px solid var(--text-black);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-align: center; font-weight: 900; font-size: 0.9rem; z-index: 10; filter: url(#rough-edge);
+            font-family: 'Arial Black', 'PingFang SC', sans-serif;
+            letter-spacing: -0.5px;
+            line-height: 1.25;
+        }
+        .software-tag {
+            position: absolute; top: 50%; left: 50%;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent-orange); color: white;
+            padding: 6px 12px; font-size: 0.72rem; border-radius: 999px; font-weight: 700;
+            white-space: nowrap; opacity: 0; pointer-events: none; transition: 0.5s ease; z-index: 20;
+            box-shadow: 0 8px 18px rgba(34, 34, 34, 0.18);
+        }
+        .software-tag-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            background: rgba(255, 255, 255, 0.16);
+            padding: 2px;
+            flex: 0 0 auto;
+        }
+        .software-tag-label {
+            line-height: 1;
+            letter-spacing: 0.4px;
+        }
+        .skill-orb-wrapper.active .software-tag { opacity: 1; }
+
+        .edu-row { display: grid; grid-template-columns: 1.2fr 1.5fr 2fr; align-items: center; padding: 1.15rem 0; border-bottom: none; gap: 1.5rem; }
+        .edu-row + .edu-row { margin-top: 0.25rem; }
+        .edu-time { color: var(--accent-orange); font-size: 1.4rem; font-weight: 700; }
+        .edu-school { font-size: 1.8rem; }
+        .tag-group { position: relative; display: flex; align-items: center; justify-content: flex-end; overflow: visible; width: 100%; gap: 16px; }
+        .main-tag {
+            background: var(--accent-yellow); color: #000; padding: 10px 20px; border-radius: 12px; font-weight: 800;
+            filter: url(#rough-edge); transition: 0.4s ease; z-index: 10; white-space: nowrap;
+        }
+        .detail-tag {
+            background: var(--accent-orange); color: white;
+            padding: 10px 0; border-radius: 12px; font-size: 0.75rem;
+            font-family: 'PingFang SC', sans-serif;
+            opacity: 0; max-width: 0; overflow: hidden; transition: 0.35s ease; white-space: nowrap; z-index: 5;
+        }
+        .tag-group:hover .detail-tag { opacity: 1; max-width: 280px; padding: 10px 20px; }
+
+        .exp-row { display: grid; grid-template-columns: 1.2fr 3.2fr; gap: 4rem; padding: 1.55rem 0; border-bottom: none; }
+        .exp-row + .exp-row { margin-top: 0.35rem; }
+        .exp-left { border-right: 1.5px solid var(--text-black); padding-right: 2.5rem; }
+        .exp-title { font-size: 2.4rem; margin-bottom: 1.5rem; }
+        .exp-bullet { margin-bottom: 1.2rem; padding-left: 1.5rem; position: relative; }
+        .exp-bullet::before { content: '●'; position: absolute; left: 0; color: var(--accent-orange); }
+        #projects .exp-right .mono-regular,
+        #internships .exp-right .mono-regular { font-family: 'PingFang SC', sans-serif; }
+        #education .section-nav-header,
+        #projects .section-nav-header,
+        #internships .section-nav-header { margin-top: 0; margin-bottom: 1.2rem; }
+        #education .section-nav-header,
+        #projects .section-nav-header { color: white; }
+
+        @keyframes marquee-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .other-work-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 2.2rem;
+            overflow: hidden;
+        }
+        .other-work-row {
+            overflow: hidden;
+            width: 100%;
+        }
+        .other-work-row.row-two {
+            padding-left: 5rem;
+        }
+        .other-work-track {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.1rem;
+            width: max-content;
+            animation: marquee-left 28s linear infinite;
+            will-change: transform;
+        }
+        .other-work-row.row-two .other-work-track {
+            animation-duration: 31s;
+        }
+        .other-work-grid:hover .other-work-track {
+            animation-play-state: paused;
+        }
+        .other-work-card {
+            width: clamp(170px, 16vw, 210px);
+            flex: 0 0 auto;
+            background: transparent;
+            position: relative;
+            overflow: visible;
+            transition: transform 0.32s ease, box-shadow 0.32s ease;
+            transform-origin: center;
+            box-shadow: 0 0 0 rgba(0,0,0,0);
+        }
+        .other-work-card img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.32s ease;
+        }
+        .other-work-card:hover {
+            transform: scale(1.06);
+            z-index: 4;
+            box-shadow: 0 16px 34px rgba(34, 34, 34, 0.14);
+        }
+        .other-work-card:hover img {
+            transform: scale(1.04);
+        }
+        .other-work-card.offset-sm { margin-top: 0.6rem; }
+        .other-work-card.offset-md { margin-top: 1.4rem; }
+        .other-work-card.offset-lg { margin-top: 2rem; }
+
+        footer {
+            background: var(--text-black);
+            color: white;
+            padding: 10.5rem 4rem 3.5rem;
+            text-align: center;
+            min-height: calc(100vh - var(--nav-height));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .footer-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-80px);
+        }
+        .footer-title {
+            color: var(--accent-yellow);
+            font-size: var(--title-size);
+            margin: 0;
+        }
+        .footer-meta {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 2rem;
+            align-items: center;
+            color: white;
+            font-family: 'PingFang SC', 'Space Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        @media (max-width: 1024px) {
+            :root { --title-size: 4rem; --uniform-padding: 5rem 1.5rem; }
+            nav { padding: 0 1.5rem; gap: 1rem; }
+            nav .mono-bold { display: none !important; }
+            .edu-row, .exp-row { grid-template-columns: 1fr; }
+            .exp-left { border-right: 0; padding-right: 0; border-bottom: 1px solid rgba(0,0,0,0.15); padding-bottom: 1.5rem; }
+            .tag-group { justify-content: flex-start; }
+            .tag-group:hover .detail-tag { opacity: 0; max-width: 0; padding: 10px 0; }
+            .other-work-row.row-two { padding-left: 2rem; }
+            .other-work-card { width: clamp(150px, 32vw, 190px); margin-top: 0 !important; }
+            .footer-meta { grid-template-columns: 1fr; gap: 0.8rem; }
+        }
+
+        @media (max-width: 640px) {
+            .other-work-row.row-two { padding-left: 0; }
+            .other-work-card { width: 62vw; }
+        }
+    </style>
+</head>
+<body class="theme-beige">
+
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="rough-edge">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
+        </filter>
+    </svg>
+
+    <nav>
+        <div class="hand-font" style="font-size: 1.4rem;">Portfolio</div>
+        <div class="mono-bold nav-links">
+            <button class="nav-link" data-target="about"><span class="cn">关于我</span> <span class="en">ABOUT ME</span></button>
+            <button class="nav-link" data-target="projects-board"><span class="cn">作品集</span> <span class="en">PROJECTS</span></button>
+            <button class="nav-link" data-target="other-work"><span class="cn">其他作品</span> <span class="en">OTHER WORKS</span></button>
+        </div>
+        <button class="lang-toggle">中文 / EN</button>
+    </nav>
+
+    <header class="hero content-wrap" data-theme="theme-beige">
+        <div class="mono-bold" style="margin-bottom: 2rem; color: var(--accent-orange);">PORTFOLIO WORKS 2026</div>
+        <h1 class="hand-font" style="font-size: var(--title-size); margin-bottom: 4rem;">TU Siyu<br>Portfolio</h1>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap;">
+            <div class="mono-regular" style="font-family: 'PingFang SC', sans-serif;"><span class="cn">电话/微信：17358988562</span><br><span class="cn">邮箱：</span>tuesytu@gmail.com</div>
+            <div class="mono-bold">SCROLL TO DISCOVER ↓</div>
+        </div>
+    </header>
+
+    <section id="about" data-theme="theme-beige">
+        <div class="content-wrap">
+            <h2 class="hand-font" style="font-size: 4rem; margin-bottom: 3rem;">关于我 ABOUT ME</h2>
+            <div class="section-nav-header">01 / <span class="cn">技能概括</span> <span class="en">SKILLS OVERVIEW</span></div>
+
+            <div class="skills-container">
+                <div class="skill-row">
+                    <div class="skill-orb-wrapper" data-sw="CURSOR, CLAUDE, STITCH"><div class="skill-orb">VIBE<br>编程</div></div>
+                    <div class="skill-orb-wrapper" data-sw="FIGMA, PS"><div class="skill-orb">UI/UX<br>设计</div></div>
+                    <div class="skill-orb-wrapper" data-sw="AUTOCAD, RHINO, SOLIDWORKS"><div class="skill-orb">硬件产品<br>设计</div></div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-orb-wrapper" data-sw="PYTHON, JAVA, ARDUINO"><div class="skill-orb">硬件<br>编程</div></div>
+                    <div class="skill-orb-wrapper" data-sw="RHINO, BLENDER, KEYSHOT"><div class="skill-orb">3D建模<br>渲染</div></div>
+                    <div class="skill-orb-wrapper" data-sw="FIGMA, AE"><div class="skill-orb">界面<br>动效</div></div>
+                    <div class="skill-orb-wrapper" data-sw="雅思7(6.5)"><div class="skill-orb">商务<br>英语</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education" data-theme="theme-green">
+        <div class="content-wrap">
+            <div class="section-nav-header">02 / <span class="cn">教育背景</span> ACADEMIC BACKGROUND</div>
+
+            <div class="edu-row">
+                <div class="edu-time">2020 - 2024</div>
+                <div class="edu-school hand-font">重庆大学</div>
+                <div class="tag-group">
+                    <div class="main-tag">本科 · 工业设计</div>
+                    <div class="detail-tag">产品设计, 汽车设计, 机械设计</div>
+                </div>
+            </div>
+            <div class="edu-row">
+                <div class="edu-time">2025 - PRESENT</div>
+                <div class="edu-school hand-font">香港理工大学</div>
+                <div class="tag-group">
+                    <div class="main-tag">硕士 · 智能系统设计</div>
+                    <div class="detail-tag">UIUX, 硬件交互, AI编程</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" data-theme="theme-orange">
+        <div class="content-wrap">
+            <div class="section-nav-header">03 / <span class="cn">项目经历</span> PROJECT EXPERIENCE</div>
+
+            <div class="exp-row">
+                <div class="exp-left">
+                    <div class="mono-bold">2022.06 - 2023.06</div>
+                    <div class="mono-regular" style="font-weight:700; margin-top:1.5rem;">产品机械设计</div>
+                </div>
+                <div class="exp-right">
+                    <h3 class="hand-font exp-title">市政管道安装机器</h3>
+                    <div class="mono-regular">
+                        <p class="exp-bullet">主导概念方案与机械结构草图设计</p>
+                        <p class="exp-bullet">完成三维建模与运动仿真，可视化展示机器人的工作流程与稳定性</p>
+                        <p class="exp-bullet">主导搭建实物样机，利用Arduino编写基础控制程序，实现机器人的抓取、移动与管道对接演示</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exp-row">
+                <div class="exp-left">
+                    <div class="mono-bold">2025.07 - 2026.02</div>
+                    <div class="mono-regular" style="font-weight:700; margin-top:1.5rem;">UX设计 & 软件开发</div>
+                </div>
+                <div class="exp-right">
+                    <h3 class="hand-font exp-title">AI辅助快闪店设计优化工具</h3>
+                    <div class="mono-regular">
+                        <p class="exp-bullet">负责工具全流程用户体验设计，主导前期设计师与实地调研，完成界面原型与交互流程设计</p>
+                        <p class="exp-bullet">基于SwiftUI实现可交互iOS原型，利于AI工具辅助编写主页和报告页面的代码运行程序，并独立完成二次迭代的全部开发工作</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="internships" data-theme="theme-yellow">
+        <div class="content-wrap">
+            <div class="section-nav-header">04 / <span class="cn">实习经历</span> INTERNSHIP EXPERIENCE</div>
+
+            <div class="exp-row">
+                <div class="exp-left">
+                    <div class="mono-bold">2023.06 - 2023.09</div>
+                    <div class="mono-regular" style="font-weight:700; margin-top:1.5rem;">产品设计实习</div>
+                </div>
+                <div class="exp-right">
+                    <h3 class="hand-font exp-title">碧昂设计工作室</h3>
+                    <div class="mono-regular">
+                        <p class="exp-bullet">协助设计师完成产品外观设计工作、参与设计提案讨论与用户调研，产出渲染效果图</p>
+                        <p class="exp-bullet">3D打印与模型制作，独立完成样机组装与功能测试</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exp-row">
+                <div class="exp-left">
+                    <div class="mono-bold">2024.07 - 2025.05</div>
+                    <div class="mono-regular" style="font-weight:700; margin-top:1.5rem;">管道工程设计实习</div>
+                </div>
+                <div class="exp-right">
+                    <h3 class="hand-font exp-title">和德石油天然气工程公司</h3>
+                    <div class="mono-regular">
+                        <p class="exp-bullet">根据现场施工情况修改与优化管道设计图</p>
+                        <p class="exp-bullet">协助管道工程设计，制作竣工图纸</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects-board" data-theme="theme-beige">
+        <div class="content-wrap">
+            <h2 class="hand-font" style="font-size: 4rem; margin-bottom: 0;">作品集 PROJECTS</h2>
+        </div>
+    </section>
+
+    <section id="other-work" data-theme="theme-beige">
+        <div class="content-wrap">
+            <h2 class="hand-font" style="font-size: 4rem; margin-bottom: 3rem;">其他作品 OTHER WORKS</h2>
+            <div class="other-work-grid">
+                <div class="other-work-row row-one">
+                    <div class="other-work-track">
+                        <div class="other-work-card offset-sm"><img src="other-work-images/01.png" alt="Other work 01"></div>
+                        <div class="other-work-card offset-lg"><img src="other-work-images/02.png" alt="Other work 02"></div>
+                        <div class="other-work-card"><img src="other-work-images/03.png" alt="Other work 03"></div>
+                        <div class="other-work-card offset-md"><img src="other-work-images/04.png" alt="Other work 04"></div>
+                        <div class="other-work-card"><img src="other-work-images/05.png" alt="Other work 05"></div>
+                        <div class="other-work-card offset-lg"><img src="other-work-images/06.png" alt="Other work 06"></div>
+                        <div class="other-work-card offset-sm"><img src="other-work-images/01.png" alt="Other work 01 duplicate"></div>
+                        <div class="other-work-card offset-lg"><img src="other-work-images/02.png" alt="Other work 02 duplicate"></div>
+                        <div class="other-work-card"><img src="other-work-images/03.png" alt="Other work 03 duplicate"></div>
+                        <div class="other-work-card offset-md"><img src="other-work-images/04.png" alt="Other work 04 duplicate"></div>
+                        <div class="other-work-card"><img src="other-work-images/05.png" alt="Other work 05 duplicate"></div>
+                        <div class="other-work-card offset-lg"><img src="other-work-images/06.png" alt="Other work 06 duplicate"></div>
+                    </div>
+                </div>
+                <div class="other-work-row row-two">
+                    <div class="other-work-track">
+                        <div class="other-work-card offset-md"><img src="other-work-images/07.png" alt="Other work 07"></div>
+                        <div class="other-work-card"><img src="other-work-images/08.png" alt="Other work 08"></div>
+                        <div class="other-work-card offset-lg"><img src="other-work-images/09.png" alt="Other work 09"></div>
+                        <div class="other-work-card offset-sm"><img src="other-work-images/10.png" alt="Other work 10"></div>
+                        <div class="other-work-card offset-md"><img src="other-work-images/11.png" alt="Other work 11"></div>
+                        <div class="other-work-card"><img src="other-work-images/12.png" alt="Other work 12"></div>
+                        <div class="other-work-card offset-md"><img src="other-work-images/07.png" alt="Other work 07 duplicate"></div>
+                        <div class="other-work-card"><img src="other-work-images/08.png" alt="Other work 08 duplicate"></div>
+                        <div class="other-work-card offset-lg"><img src="other-work-images/09.png" alt="Other work 09 duplicate"></div>
+                        <div class="other-work-card offset-sm"><img src="other-work-images/10.png" alt="Other work 10 duplicate"></div>
+                        <div class="other-work-card offset-md"><img src="other-work-images/11.png" alt="Other work 11 duplicate"></div>
+                        <div class="other-work-card"><img src="other-work-images/12.png" alt="Other work 12 duplicate"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-main">
+            <h2 class="hand-font footer-title">See You</h2>
+        </div>
+        <div class="footer-meta">
+            <div>TEL/Wechat: 17358988562</div>
+            <div>E-mail: tuesytu@gmail.com</div>
+            <div>TU Siyu Personal portfolio</div>
+        </div>
+    </footer>
+
+    <script>
+        const softwareIconMap = {
+            CURSOR: 'https://cdn.simpleicons.org/cursor/ffffff',
+            CLAUDE: 'https://cdn.simpleicons.org/anthropic/ffffff',
+            STITCH: 'https://cdn.simpleicons.org/google/ffffff',
+            FIGMA: 'https://cdn.simpleicons.org/figma/ffffff',
+            PS: 'https://cdn.simpleicons.org/adobephotoshop/ffffff',
+            AUTOCAD: 'https://cdn.simpleicons.org/autodesk/ffffff',
+            RHINO: 'https://cdn.simpleicons.org/rhinoceros/ffffff',
+            SOLIDWORKS: 'https://cdn.simpleicons.org/dassaultsystemes/ffffff',
+            PYTHON: 'https://cdn.simpleicons.org/python/ffffff',
+            JAVA: 'https://cdn.simpleicons.org/openjdk/ffffff',
+            ARDUINO: 'https://cdn.simpleicons.org/arduino/ffffff',
+            BLENDER: 'https://cdn.simpleicons.org/blender/ffffff',
+            KEYSHOT: 'https://cdn.simpleicons.org/render/ffffff',
+            AE: 'https://cdn.simpleicons.org/adobeaftereffects/ffffff'
+        };
+
+        function createFallbackIcon(label) {
+            const shortLabel = label.replace(/\s+/g, '').slice(0, 2).toUpperCase();
+            return `data:image/svg+xml;utf8,${encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                    <rect width="64" height="64" rx="32" fill="#ffffff" fill-opacity="0.22"/>
+                    <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle"
+                        font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="white">${shortLabel}</text>
+                </svg>
+            `)}`;
+        }
+
+        const wrappers = document.querySelectorAll('.skill-orb-wrapper');
+        wrappers.forEach(wrapper => {
+            const swArr = wrapper.dataset.sw.split(', ');
+            swArr.forEach(name => {
+                const tag = document.createElement('div');
+                tag.className = 'software-tag';
+                const icon = document.createElement('img');
+                icon.className = 'software-tag-icon';
+                icon.src = softwareIconMap[name] || createFallbackIcon(name);
+                icon.alt = `${name} logo`;
+                icon.onerror = () => {
+                    icon.onerror = null;
+                    icon.src = createFallbackIcon(name);
+                };
+
+                const label = document.createElement('span');
+                label.className = 'software-tag-label';
+                label.innerText = name;
+
+                tag.appendChild(icon);
+                tag.appendChild(label);
+                wrapper.appendChild(tag);
+            });
+            wrapper.addEventListener('mouseenter', () => {
+                const rectA = wrapper.getBoundingClientRect();
+                const centerA = { x: rectA.left + rectA.width / 2, y: rectA.top + rectA.height / 2 };
+                wrappers.forEach(other => {
+                    if (other === wrapper) {
+                        other.classList.add('active');
+                        other.style.transform = "scale(1.2)";
+                        const tags = other.querySelectorAll('.software-tag');
+                        tags.forEach((tag, i) => {
+                            const angle = (360 / tags.length * i) * (Math.PI / 180);
+                            tag.style.transform = `translate(calc(-50% + ${Math.cos(angle) * 100}px), calc(-50% + ${Math.sin(angle) * 100}px))`;
+                        });
+                    } else {
+                        const rectB = other.getBoundingClientRect();
+                        const centerB = { x: rectB.left + rectB.width / 2, y: rectB.top + rectB.height / 2 };
+                        const dx = centerB.x - centerA.x;
+                        const dy = centerB.y - centerA.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                        other.style.transform = `translate(${(dx / dist) * 50}px, ${(dy / dist) * 50}px) scale(0.85)`;
+                        other.style.opacity = "0.4";
+                    }
+                });
+            });
+            wrapper.addEventListener('mouseleave', () => {
+                wrappers.forEach(w => { w.classList.remove('active'); w.style.transform = ''; w.style.opacity = "1"; });
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) document.body.className = entry.target.dataset.theme; });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('[data-theme]').forEach(el => observer.observe(el));
+
+        const navButtons = document.querySelectorAll('.nav-link');
+        const navBar = document.querySelector('nav');
+
+        function scrollToSection(targetId) {
+            const target = document.getElementById(targetId);
+            if (!target) return;
+            const offset = navBar.offsetHeight;
+            const top = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                scrollToSection(button.dataset.target);
+            });
+        });
+    </script>
+</body>
+</html>
